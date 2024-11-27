@@ -2,8 +2,16 @@ use extism_pdk::{debug,plugin_fn,FnResult};
 
 #[plugin_fn]
 pub extern "C" fn test() -> FnResult<()> {
-    debug!("{:?}", std::time::SystemTime::now());
-    std::thread::sleep(std::time::Duration::from_millis(2000));
-    debug!("{:?}", std::time::SystemTime::now());
+    let rt = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+
+    rt.block_on(async {
+        debug!("here1");
+        tokio::time::sleep(std::time::Duration::from_millis(2000)).await;
+        debug!("here2");
+    });
+
     Ok(())
 }

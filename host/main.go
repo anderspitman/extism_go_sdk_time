@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"github.com/extism/go-sdk"
+	"github.com/tetratelabs/wazero"
 )
 
 func main() {
@@ -27,9 +28,14 @@ func main() {
 		},
 	}
 
+	moduleConfig := wazero.NewModuleConfig().
+		WithSysWalltime().
+		WithSysNanosleep()
+
 	ctx := context.Background()
 	config := extism.PluginConfig{
-		EnableWasi: true,
+		ModuleConfig: moduleConfig,
+		EnableWasi:   true,
 	}
 	hostFunctions := []extism.HostFunction{}
 	plugin, err := extism.NewPlugin(ctx, manifest, config, hostFunctions)
