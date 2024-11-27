@@ -30,6 +30,7 @@ func main() {
 
 	moduleConfig := wazero.NewModuleConfig().
 		WithSysWalltime().
+		WithSysNanotime().
 		WithSysNanosleep()
 
 	ctx := context.Background()
